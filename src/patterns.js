@@ -6,10 +6,14 @@ const hollowLine = function(width) {
   return star(1) + " ".repeat(width - 2) + star(1);
 }
 
-const leftPadded = function(pattern) {
-  const width = pattern.reduce(function(maxWidth, line) {
+const maxLength = function(list) {
+  return list.reduce(function(maxWidth, line) {
     return maxWidth > line.length ? maxWidth : line.length;
   }, 0);
+}
+
+const leftPadded = function(pattern) {
+  const width = maxLength(pattern);
 
   return pattern.map(function(line) {
     return line.padStart(width);
