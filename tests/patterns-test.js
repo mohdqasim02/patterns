@@ -9,6 +9,8 @@ const assert = testing.assert;
 const summary = testing.summary;
 
 const star = patterns.star;
+const diamond = patterns.diamond;
+const leftAlignTriangle = patterns.leftAlignTriangle;
 const hollowLine = patterns.hollowLine;
 const generatePattern = patterns.applyStyleGroups;
 
@@ -32,9 +34,24 @@ const testPatterns = function() {
     actual: generatePattern([star], [[3, 2, 1]])
   });
 
+  it("should give right align triangle when style and ascending line widths and passed", "pattern()", {
+    expected: ["  *", " **", "***"],
+    actual: leftAlignTriangle([star], [[1, 2, 3]])
+  });
+
+  it("should give right align inverted triangle when style and ascending line widths and passed", "pattern()", {
+    expected: ["***", " **", "  *"],
+    actual: leftAlignTriangle([star], [[3, 2, 1]])
+  });
+
   it("should give hollow rectangle when styles and widhts are provided", "pattern()", {
     expected: ["****", "*  *", "*  *",  "****"],
     actual: generatePattern([star, hollowLine, star], [[4], [4, 4], [4]])
+  });
+
+  it("should give diamond when styles and widhts are provided", "pattern()", {
+    expected: ["  *", " ***", "*****",  " ***", "  *"],
+    actual: diamond([star], [[1, 2, 3, 2, 1]])
   });
 }
 
