@@ -1,11 +1,69 @@
-const generateLineWidths = function(rows, indexMapper) {
+const getSolidWidths = function(rows, columns) {
   const widths = [];
 
-  for(let index = 0; index < rows; index++) {
-    widths.push(indexMapper(index));
+  for(let index = 1; index <= rows; index++) {
+    widths.push(columns);
   }
 
   return widths;
+};
+
+const getHollowWidths = function(rows, columns) {
+  const widths = [];
+
+  for(let index = 1; index <= rows - 2; index++) {
+    widths.push(columns);
+  }
+
+  return [].concat([[columns]], [widths], [[columns]]);
+};
+
+const getTriangleWidths = function(rows) {
+  const widths = [];
+
+  for(let index = 1; index <= rows; index++) {
+    widths.push(index);
+  }
+
+  return widths;
+};
+
+const getInvertedTriangleWidths = function(rows) {
+  const widths = [];
+
+  for(let index = 0; index < rows; index++) {
+    widths.push(rows - index);
+  }
+
+  return widths;
+};
+
+const getDiamondWidths = function(rows) {
+  const widths = [];
+
+  for(let index = 1; index < rows; index += 2) {
+    widths.push(index);
+  }
+
+  for(let index = rows; index > 0; index -= 2) {
+    widths.push(index);
+  }
+
+  return widths;
+};
+
+const getHollowDiamondWidths = function(rows) {
+  const widths = [];
+
+  for(let index = 3; index < rows; index += 2) {
+    widths.push(index);
+  }
+
+  for(let index = rows; index > 1; index -= 2) {
+    widths.push(index);
+  }
+
+  return [].concat([[1]], [widths], [[1]]);
 };
 
 const stars = function(times) {
@@ -53,31 +111,43 @@ const generatePattern = function(styles, lineWidths) {
   });
 };
 
-const leftAlignTriangle = function(style, lineWidths) {
-  return leftPadding(generatePattern(style, lineWidths));
-};
-
-const diamond = function(styles, lineWidths) {
-  return centerAlign(generatePattern(styles, lineWidths));
-};
-
 const solidRectangle = function(rows, columns) {
-  return generatePattern([stars], generateLineWidths(rows, function(index) {
-    return columns;
-  }));
+  return applyStyle(stars, getSolidWidths(rows, columns));
 };
 
 const hollowRectangle = function(rows, columns) {
-  const lineWidths = [[columns]].concat(generateLineWidths(rows - 2, function(index) {
-    return columns;
-  }));
-  lineWidths.push([columns]);
-
-  return generatePattern([stars, hollowLine, stars], lineWidths);
+  return generatePattern([stars, hollowLine, stars], getHollowWidths(rows, columns));
 };
 
-exports.stars = stars;
-exports.hollowLine = hollowLine;
+const leftAlignedTriangle = function(rows) {
+  return applyStyle(stars, getTriangleWidths(rows));
+};
+
+const leftAlignedInvertedTriangle = function(rows) {
+  return applyStyle(stars, getInvertedTriangleWidths(rows));
+};
+
+const rightAlignedTriangle = function(rows) {
+  return leftPadding(applyStyle(stars, getTriangleWidths(rows)));
+};
+
+const rightAlignedInvertedTriangle = function(rows) {
+  return leftPadding(applyStyle(stars, getInvertedTriangleWidths(rows)));
+};
+
+const diamond = function(rows) {
+  return centerAlign(applyStyle(stars, getDiamondWidths(rows)));
+};
+
+const hollowDiamond = function(rows) {
+  return centerAlign(generatePattern([stars, hollowLine, stars], getHollowDiamondWidths(rows)));
+};
+
 exports.diamond = diamond;
-exports.leftAlignTriangle = leftAlignTriangle;
-exports.generatePattern = generatePattern;
+exports.hollowDiamond = hollowDiamond;
+exports.solidRectangle = solidRectangle;
+exports.hollowRectangle = hollowRectangle;
+exports.leftAlignedTriangle = leftAlignedTriangle;
+exports.rightAlignedTriangle = rightAlignedTriangle;
+exports.leftAlignedInvertedTriangle = leftAlignedInvertedTriangle;
+exports.rightAlignedInvertedTriangle = rightAlignedInvertedTriangle;
