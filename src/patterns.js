@@ -1,3 +1,13 @@
+const generateLineWidths = function(rows, indexMapper) {
+  const widths = [];
+
+  for(let index = 0; index < rows; index++) {
+    widths.push(indexMapper(index));
+  }
+
+  return widths;
+};
+
 const stars = function(times) {
   return "*".repeat(times);
 };
@@ -25,12 +35,11 @@ const padLeftRight = function(line, padding) {
   return line.padStart(Math.floor(padding / 2) + width).padEnd(width + padding);
 };
 
-centerAlign = function(pattern) {
+const centerAlign = function(pattern) {
   const maxWidth = maxLength(pattern);
 
   return pattern.map(function(line) {
-    const padding = maxWidth - line.length;
-    return padLeftRight(line, padding);
+    return padLeftRight(line, maxWidth - line.length);
   });
 };
 
@@ -50,6 +59,21 @@ const leftAlignTriangle = function(style, lineWidths) {
 
 const diamond = function(styles, lineWidths) {
   return centerAlign(generatePattern(styles, lineWidths));
+};
+
+const solidRectangle = function(rows, columns) {
+  return generatePattern([stars], generateLineWidths(rows, function(index) {
+    return columns;
+  }));
+};
+
+const hollowRectangle = function(rows, columns) {
+  const lineWidths = [[columns]].concat(generateLineWidths(rows - 2, function(index) {
+    return columns;
+  }));
+  lineWidths.push([columns]);
+
+  return generatePattern([stars, hollowLine, stars], lineWidths);
 };
 
 exports.stars = stars;
