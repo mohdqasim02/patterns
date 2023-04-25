@@ -12,7 +12,7 @@ const star = patterns.star;
 const diamond = patterns.diamond;
 const leftAlignTriangle = patterns.leftAlignTriangle;
 const hollowLine = patterns.hollowLine;
-const generatePattern = patterns.applyStyleGroups;
+const generatePattern = patterns.generatePattern;
 
 const it = function(testName, funcName, testData) {
   assert(testName, funcName, testData);
