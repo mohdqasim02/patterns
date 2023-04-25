@@ -36,13 +36,10 @@ const leftAlignTriangle = function(style, lineWidths) {
 
 const diamond = function(style, lineWidths) {
   const leftPart = leftPadding(generatePattern(style, lineWidths));
-  const rightPart = applyStyle(style[0], lineWidths[0].flatMap(
-    function(element) { 
-      return element - 1; 
-    }));
+  const rightPart = generatePattern(style, lineWidths);
 
   return leftPart.reduce(function(pattern, line, index) {
-    return pattern.concat(line + rightPart[index]);
+    return pattern.concat(line.slice(0, -1) + rightPart[index]);
   }, []);
 };
 
